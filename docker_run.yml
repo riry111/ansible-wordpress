@@ -1,0 +1,13 @@
+- hosts: docker
+  remote_user: root  
+  tasks:
+
+    - name: Execute docker run
+      docker: 
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        ports:
+        -  "{{ item.ssh }}:22"
+        -  "{{ item.http }}:80"
+        privileged: yes
+      with_items: "{{ DOCKER_ENVS }}"

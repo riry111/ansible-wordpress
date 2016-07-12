@@ -1,0 +1,36 @@
+- hosts: ansible
+  remote_user: root
+  tasks: 
+  - name: delete known_hosts entory
+    file: path=/root/.ssh/known_hosts state=absent
+
+- hosts: docker
+  remote_user: root  
+  tasks:
+  - name: Disable All  Repository
+    shell: subscription-manager repos --disable="*"
+
+  - name: Enable Repository 
+    shell:  subscription-manager repos --enable={{ item }}
+    with_items: 
+      - rhel-7-server-rpms
+      - rhel-7-server-extras-rpms
+      - rhel-7-server-optional-rpms
+
+  - name: Install Docker package
+    yum: name={{ item }} state=present
+    with_items:
+      - docker
+      - docker-registry
+      - device-mapper-libs
+      - device-mapper-event-libs
+      - python-docker-py
+
+  - name: Install Git package
+    yum: name={{ item }} state=present
+    with_items:
+      - git
+
+  - name: Start Docker Service
+    service: name=docker.service state=started enabled=yes
+

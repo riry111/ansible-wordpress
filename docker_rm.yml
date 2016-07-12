@@ -1,0 +1,10 @@
+- hosts: docker
+  remote_user: root  
+  tasks:
+
+    - name: Execute docker rm
+      docker: 
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        state: absent
+      with_items: "{{ DOCKER_ENVS }}"

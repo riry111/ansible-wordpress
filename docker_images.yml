@@ -1,0 +1,21 @@
+- hosts: docker
+  vars:
+    SCRIPT_DIR: /root/DockerScripts/centos6-ssh
+    IMAGE_NAME: centos6-ssh
+
+  remote_user: root  
+  tasks:
+    - name: Create Docker Scripts  Directory
+      file: path={{ SCRIPT_DIR }} state=directory
+
+    - name: Copy Files for docker build
+      copy: src=./DockerScripts/centos6-ssh/{{ item }} dest={{ SCRIPT_DIR }}/{{ item }}
+      with_items:
+        - Dockerfile
+        - init.sh
+        - authorized_keys
+
+    - name: Create Docker Image
+      docker_image:
+        path: "{{ SCRIPT_DIR }}"
+        name: "{{ IMAGE_NAME }}"

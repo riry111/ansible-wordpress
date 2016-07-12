@@ -1,0 +1,23 @@
+#------------------------------------------
+# Inventory (hosts)
+#------------------------------------------
+#[ansible]
+# ansible-playbook 実行サーバ
+#
+[ansible]
+localhost
+
+#[docker]
+#  docker コマンド実行対象ホスト
+#  グループ変数ファイル：group_vars/docker へコンテナ情報の記載が必要
+#
+[docker]
+192.168.99.212
+  
+#[wordpress-server]
+#  WORDPRESS インストール対象サーバ
+#  今回は Dockerコンテナで Centos6 を複数起動しインストールするため、
+#  変数で IPアドレス と sshdのポート番号 を指定 
+[wordpress-server]
+wp01 ansible_ssh_port=10022 ansible_ssh_host=192.168.99.212
+wp02 ansible_ssh_port=20022 ansible_ssh_host=192.168.99.212
